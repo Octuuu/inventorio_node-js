@@ -6,17 +6,18 @@ const productIdInput = document.getElementById('productId');
 
 const createProductRow = (product) => {
     const tr = document.createElement('tr');
-    tr.classList = '';
+    tr.className = 'product-caja'
+    tr.classList = 'h-12 text-center'
     tr.dataset.id = product.id;
     
     tr.innerHTML = `
-        <td class="">${product.name}</td>
-        <td>${product.category}</td>
-        <td>${product.stock}</td>
-        <td>$${product.price}</td>
+        <td class="font-light">${product.name}</td>
+        <td class="font-light">${product.category}</td>
+        <td class="font-light"">${product.stock}</td>
+        <td class="font-light">$${product.price}</td>
         <td>
-            <button onclick="editProduct(${product.id}, '${product.name}', '${product.category}', ${product.stock}, ${product.price})">✏ Editar</button>
-            <button onclick="deleteProduct(${product.id})">🗑 Eliminar</button>
+            <button class="editar" onclick="editProduct(${product.id}, '${product.name}', '${product.category}', ${product.stock}, ${product.price})">✏ Editar</button>
+            <button class="eliminar" onclick="deleteProduct(${product.id})">🗑 Eliminar</button>
         </td>
     `;
     return tr;

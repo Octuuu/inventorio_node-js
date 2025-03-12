@@ -1,0 +1,27 @@
+.editar{
+    background-color: #357526;
+    color: white;
+    border-radius: 7px;
+    width: 6rem;
+    height: 35px;
+    font-weight: bold;
+}
+.editar:hover{
+    background-color: #2d6522;
+}
+.eliminar{
+    background-color: #d6111e;
+    color: white;
+    border-radius: 7px;
+    width: 6rem;
+    height: 35px;
+    font-weight: bold;
+}
+.eliminar:hover{
+    background-color: #b8090f;
+}
+
+.product-caja{
+    text-align: center;
+    
+}
