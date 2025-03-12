@@ -5,31 +5,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Inventarios</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <h1>Gestión de Inventarios</h1>
+<body class="flex items-center flex-col gap-10">
+    <h1 class="text-3xl font-bold
+    ">Gestión de Inventarios</h1>
 
-    <form id="productForm">
+    <form id="productForm" class="font-semibold p-6 rounded-2xl space-y-4">
         <input type="hidden" id="productId">
-        <input type="text" id="name" placeholder="Nombre del producto" required>
-        <input type="text" id="category" placeholder="Categoría" required>
-        <input type="number" id="stock" placeholder="Stock" required>
-        <input type="number" id="price" placeholder="Precio" required>
-        <button type="submit">Guardar</button>
+        
+        <input type="text" id="name" placeholder="Nombre del producto" required
+            class="p-3 border h-10 border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500">
+        
+        <input type="text" id="category" placeholder="Categoría" required
+            class="p-3 border h-10 border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500">
+        
+        <input type="number" id="stock" placeholder="Stock" required
+            class="p-3 border h-10 border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500">
+        
+        <input type="number" id="price" placeholder="Precio" required
+            class="p-3 border h-10 border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500">
+        
+        <button type="submit"
+            class="w-32 font-bold h-10 text-center bg-blue-600 text-white rounded-xl hover:bg-blue-800 transition duration-300">
+            Guardar
+        </button>
     </form>
+    
 
-    <table>
-        <thead>
+    <table class="w-full max-w-7xl border-collapse border border-gray-300 shadow-lg rounded-xl overflow-hidden">
+        <thead class="bg-blue-900 text-white">
             <tr>
-                <th>Nombre</th>
-                <th>Categoría</th>
-                <th>Stock</th>
-                <th>Precio</th>
-                <th>Acciones</th>
+                <th class="p-3 border border-gray-300">Nombre</th>
+                <th class="p-3 border border-gray-300">Categoría</th>
+                <th class="p-3 border border-gray-300">Stock</th>
+                <th class="p-3 border border-gray-300">Precio</th>
+                <th class="p-3 border border-gray-300">Acciones</th>
             </tr>
         </thead>
-        <tbody id="productList"></tbody>
+        <tbody id="productList" class="bg-white divide-y divide-gray-200">
+            
+        </tbody>
     </table>
+    
 
     <script src="script.js"></script>
 </body>

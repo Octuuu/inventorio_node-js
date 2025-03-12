@@ -4,53 +4,85 @@ const productForm = document.getElementById('productForm');
 const productList = document.getElementById('productList');
 const productIdInput = document.getElementById('productId');
 
+const createProductRow = (product) => {
+    const tr = document.createElement('tr');
+    tr.classList = '';
+    tr.dataset.id = product.id;
+    
+    tr.innerHTML = `
+        <td class="">${product.name}</td>
+        <td>${product.category}</td>
+        <td>${product.stock}</td>
+        <td>$${product.price}</td>
+        <td>
+            <button onclick="editProduct(${product.id}, '${product.name}', '${product.category}', ${product.stock}, ${product.price})">✏ Editar</button>
+            <button onclick="deleteProduct(${product.id})">🗑 Eliminar</button>
+        </td>
+    `;
+    return tr;
+};
+
 const fetchProducts = async () => {
-    const res = await fetch(API_URL);
-    const products = await res.json();
-    productList.innerHTML = products.map(product => `
-        <tr>
-            <td>${product.name}</td>
-            <td>${product.category}</td>
-            <td>${product.stock}</td>
-            <td>$${product.price}</td>
-            <td>
-                <button id="edit" onclick="editProduct(${product.id}, '${product.name}', '${product.category}', ${product.stock}, ${product.price})">✏ Editar</button>
-                <button id="delete" onclick="deleteProduct(${product.id})">🗑 Eliminar</button>
-            </td>
-        </tr>
-    `).join('');
+    try {
+        const res = await fetch(API_URL);
+        if (!res.ok) throw new Error("Error al cargar los productos");
+        const products = await res.json();
+
+        productList.innerHTML = "";
+        products.forEach(product => productList.appendChild(createProductRow(product)));
+    } catch (error) {
+        console.error(error);
+        alert("No se pudo cargar los productos.");
+    }
 };
 
 productForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const id = productIdInput.value;
     const product = {
-        name: document.getElementById('name').value,
-        category: document.getElementById('category').value,
-        stock: document.getElementById('stock').value,
-        price: document.getElementById('price').value
+        name: document.getElementById('name').value.trim(),
+        category: document.getElementById('category').value.trim(),
+        stock: Number(document.getElementById('stock').value),
+        price: Number(document.getElementById('price').value)
     };
 
-    if (id) {
-        await fetch(`${API_URL}/${id}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(product)
-        });
-    } else {
-        await fetch(API_URL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(product)
-        });
+    if (!product.name || !product.category || product.stock <= 0 || product.price <= 0) {
+        alert("Por favor, completa todos los campos correctamente.");
+        return;
+    }
+
+    try {
+        let res;
+        if (id) {
+            res = await fetch(`${API_URL}/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(product)
+            });
+
+            if (res.ok) {
+                const updatedRow = document.querySelector(`tr[data-id="${id}"]`);
+                updatedRow.replaceWith(createProductRow({ ...product, id }));
+            }
+        } else {
+            res = await fetch(API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(product)
+            });
+
+            if (res.ok) {
+                const newProduct = await res.json();
+                productList.appendChild(createProductRow(newProduct));
+            }
+        }
+    } catch (error) {
+        console.error(error);
+        alert("Error al guardar el producto.");
     }
 
     productForm.reset();
-    fetchProducts();
+    productIdInput.value = "";
 });
 
 const editProduct = (id, name, category, stock, price) => {
@@ -62,10 +94,15 @@ const editProduct = (id, name, category, stock, price) => {
 };
 
 const deleteProduct = async (id) => {
-    await fetch(`${API_URL}/${id}`, {
-        method: 'DELETE'
-    });
-    fetchProducts();
-}
+    try {
+        const res = await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+        if (!res.ok) throw new Error("Error al eliminar el producto");
+
+        document.querySelector(`tr[data-id="${id}"]`).remove();
+    } catch (error) {
+        console.error(error);
+        alert("No se pudo eliminar el producto.");
+    }
+};
 
 fetchProducts();
